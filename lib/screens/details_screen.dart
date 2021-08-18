@@ -8,6 +8,7 @@ class DetailsScreen extends StatelessWidget {
     final String movie =
         ModalRoute.of(context)?.settings.arguments.toString() ??
             'no-movie-title';
+    print(movie);
     return Scaffold(
         body: CustomScrollView(
       slivers: [
