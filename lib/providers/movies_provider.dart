@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:peliculas_app/models/models.dart';
+import 'package:peliculas_app/models/popular_movies_response.dart';
 
 class MoviesProvider extends ChangeNotifier {
   String _baseUrl = 'api.themoviedb.org';
@@ -8,20 +9,41 @@ class MoviesProvider extends ChangeNotifier {
   String _language = 'es-ES';
 
   List<Movie> onDisplayMovies = [];
+  List<Movie> popularMovies = [];
+
+  int _popularPage = 0;
 
   MoviesProvider() {
     print('Inicializado Movies Provider');
     this.getOnDisplayMovies();
+    this.getPopularMovies();
+  }
+
+  Future<String> _getJsonData(String endpoint, [int page = 1]) async {
+    var url = Uri.https(_baseUrl, endpoint,
+        {'api_key': _apiKey, 'language': _language, 'page': '$page'});
+
+    final response = await http.get(url);
+    return response.body;
   }
 
   getOnDisplayMovies() async {
-    var url = Uri.https(_baseUrl, '3/movie/now_playing',
-        {'api_key': _apiKey, 'language': _language, 'page': '1'});
-
     try {
-      final response = await http.get(url);
-      final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
+      final data = await _getJsonData('3/movie/now_playing');
+      final nowPlayingResponse = NowPlayingResponse.fromJson(data);
       onDisplayMovies = nowPlayingResponse.results;
+      notifyListeners();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  getPopularMovies() async {
+    try {
+      _popularPage++;
+      final data = await _getJsonData('3/movie/popular', _popularPage);
+      final popularMoviesResponse = PopularMoviesResponse.fromJson(data);
+      popularMovies = [...popularMovies, ...popularMoviesResponse.results];
       notifyListeners();
     } catch (error) {
       print(error);
