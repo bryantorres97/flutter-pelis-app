@@ -24,6 +24,12 @@ class Movie {
         : 'https://i.stack.imgur.com/GNhxO.png';
   }
 
+  get fullBackdropImg {
+    return (this.backdropPath != null)
+        ? 'https://image.tmdb.org/t/p/w500${this.backdropPath}'
+        : 'https://i.stack.imgur.com/GNhxO.png';
+  }
+
   bool adult;
   String? backdropPath;
   List<int> genreIds;
