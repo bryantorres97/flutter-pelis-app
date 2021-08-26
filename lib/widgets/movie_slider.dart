@@ -31,7 +31,6 @@ class _MovieSliderState extends State<MovieSlider> {
   @override
   void dispose() {
     super.dispose();
-    // TODO: implement dispose
   }
 
   @override
@@ -80,8 +79,8 @@ class _MoviePoster extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, 'details',
-                arguments: 'movie-instance'),
+            onTap: () =>
+                Navigator.pushNamed(context, 'details', arguments: movie),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(
