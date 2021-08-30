@@ -54,12 +54,14 @@ class _MovieSliderState extends State<MovieSlider> {
           ),
           Expanded(
               child: ListView.builder(
-            controller: scrollController,
-            scrollDirection: Axis.horizontal,
-            itemCount: widget.movies.length,
-            itemBuilder: (_, int index) =>
-                _MoviePoster(movie: widget.movies[index]),
-          ))
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.movies.length,
+                  itemBuilder: (_, int index) {
+                    final movie = widget.movies[index];
+                    movie.movieId = 'slider-${movie.id}';
+                    return _MoviePoster(movie: widget.movies[index]);
+                  }))
         ],
       ),
     );
@@ -81,14 +83,17 @@ class _MoviePoster extends StatelessWidget {
           GestureDetector(
             onTap: () =>
                 Navigator.pushNamed(context, 'details', arguments: movie),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/no-image.jpg'),
-                image: NetworkImage(movie.fullPosterImg),
-                width: 130,
-                height: 190,
-                fit: BoxFit.cover,
+            child: Hero(
+              tag: movie.movieId!,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: FadeInImage(
+                  placeholder: AssetImage('assets/no-image.jpg'),
+                  image: NetworkImage(movie.fullPosterImg),
+                  width: 130,
+                  height: 190,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

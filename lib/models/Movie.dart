@@ -44,6 +44,7 @@ class Movie {
   bool video;
   double voteAverage;
   int voteCount;
+  String? movieId;
 
   factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
 
